@@ -2,10 +2,9 @@
   "name": "node",
   "version": "1.0.0",
   "description": "Yeo un gun's Potfolio",
-  "main": "server.js",
+  "main": "Node.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
