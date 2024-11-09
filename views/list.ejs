@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+    <link href="\main.css" rel="styleSheet">
+</head>
+<body>
+    
+    <body class="grey-bg">
+
+      <%= JSON.stringify(posts) %>
+        <div class="white-bg">
+          <div class="list-box">
+            <h4><%= posts[0].title %></h4>
+            <p><%= posts[0].content %></p>
+          </div>
+          <div class="list-box">
+            <h4><%= posts[0].title %></h4>
+            <p><%= posts[1].content %></p>
+          </div>
+        </div> 
+      
+      </body>
+
+</body>
+</html>
