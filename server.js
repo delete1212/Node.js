@@ -8,7 +8,7 @@ app.set('view engine', 'ejs')
 const { MongoClient } = require('mongodb')
 
 let db
-const url = 'mongodb+srv://yug3657:Cupa3659@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster'
+const url = 'mongodb+srv://admin1234:qwer1234@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster'
 new MongoClient(url).connect().then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
@@ -20,7 +20,7 @@ new MongoClient(url).connect().then((client)=>{
 })
 
 app.get('/', (요청, 응답) => {
-    응답.sendfile(__dirname + '/public/HTML/index.html')
+    응답.sendfile(__dirname + '/index.html')
 })
 
 app.get('/news', (요청, 응답) => {
@@ -33,7 +33,7 @@ app.get('/shop', function(요청, 응답){
 })
 
 app.get('/about', (요청, 응답) => {
-    응답.sendfile(__dirname + '/public/HTML/about.html')
+    응답.sendfile(__dirname + '/about.html')
 })
 
 app.get('/list', async (요청, 응답) => {
