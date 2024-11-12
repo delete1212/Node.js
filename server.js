@@ -3,6 +3,9 @@ const app = express()
 
 app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
+app.use(express.json())
+app.use(express.urlencoded({extended:true})) 
+
 
 
 const { MongoClient } = require('mongodb')
@@ -44,4 +47,13 @@ app.get('/list', async (요청, 응답) => {
 
 app.get('/time', async (요청, 응답) => {
     응답.render('time.ejs', { date : new Date() })
+})
+
+app.get('/write', (요청, 응답) =>{
+    응답.render('write.ejs')
+})
+
+app.post('/add', (요청, 응답) => {
+    console.log(요청.body)
+    db.collection('post').insertOne(요청.body)
 })
