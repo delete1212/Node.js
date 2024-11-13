@@ -80,5 +80,19 @@ app.get('/detail/:aaaa', async (요청, 응답)=>{
         console.log(e)
         응답.status(500).send('서버에러')
     }
-    
+})
+
+app.post('/detail/:postId/comment', async (요청, 응답) => {
+    const Id = 요청.params.postId
+    try{
+        if (요청.body.comments == ''){
+            응답.send('댓글을 입력해주세요!')
+        } else {
+            await db.collection('post').updateOne({ _id: new ObjectId(Id)}, {$push: { comments: { text:요청.body.comments, createdAt: new Date()}}})
+            응답.redirect('/list')
+        }
+    } catch(e) {
+        console.log(e)
+        응답.status(500).send('서버에러')
+    }
 })

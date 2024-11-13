@@ -14,9 +14,26 @@
         <div class="detail-bg">
             <h4><%= post.title %></h4>
             <p><%= post.content %></p>
-        </div> 
-      
-      </body>
+        </div>
 
+        <div class="white-bg">
+            <% if (post.comments) { %>
+                <% for (let i = 0; i < post.comments.length; i++) { %>
+                    <div class="list-box">
+                        <p><%= post.comments[i].text %></p>
+                        <p><%= post.comments[i].createdAt %></p>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <p>댓글이 없습니다.</p>
+            <% } %>
+        </div>
+
+        <form  class="form-box" action="/detail/<%= post._id %>/comment" method="post">
+            <input type="text" name="comments">
+            <button type="submit">Add Comment</button>
+        </form>
+
+    </body>
 </body>
 </html>
