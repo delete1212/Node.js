@@ -8,7 +8,7 @@ app.use(express.urlencoded({extended:true}))
 
 
 
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 
 let db
 const url = 'mongodb+srv://admin1234:qwer1234@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster'
@@ -53,7 +53,32 @@ app.get('/write', (요청, 응답) =>{
     응답.render('write.ejs')
 })
 
-app.post('/add', (요청, 응답) => {
-    console.log(요청.body)
-    db.collection('post').insertOne(요청.body)
+app.post('/add', async (요청, 응답) => {
+    try{
+        if (요청.body.title == ''){
+            응답.send('제목을 입력해주세요!')
+        } else {
+            await db.collection('post').insertOne({title : 요청.body.title, content : 요청.body.content})
+            응답.redirect('/list')
+        }
+    } catch(e) {
+        console.log(e)
+        응답.status(500).send('서버에러')
+    }
+})
+
+app.get('/detail/:aaaa', async (요청, 응답)=>{
+    try {
+        const id = 요청.params.aaaa
+        if(ObjectId.isValid(id)){
+            const result = await db.collection('post').findOne({ _id : new ObjectId(id) })
+            응답.render('detail.ejs', {post : result})
+        } else {
+            응답.status(400).send('잘못된 요청')
+        }
+    } catch(e) {
+        console.log(e)
+        응답.status(500).send('서버에러')
+    }
+    
 })
