@@ -96,3 +96,9 @@ app.post('/detail/:postId/comment', async (요청, 응답) => {
         응답.status(500).send('서버에러')
     }
 })
+
+app.get('/edit/:id', async (요청, 응답) =>{
+    const id = 요청.params.id
+    const result = await db.collection('post').findOne({ _id : new ObjectId(id) })
+    응답.render('edit.ejs', {result : result})
+})

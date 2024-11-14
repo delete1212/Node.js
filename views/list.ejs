@@ -18,6 +18,7 @@
           <div class="list-box">
             <h4><a href="/detail/<%= posts[i]._id %>"><%= posts[i].title %></a></h4>
             <p><%= posts[i].content %></p>
+            <a href="/edit/<%= posts[i]._id %>">✏️</a>
           </div>
           <% } %>
         </div> 
