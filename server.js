@@ -1,10 +1,13 @@
 const express = require('express')
 const app = express()
+const methoOverride = require('method-override')
 
+app.use(methoOverride('_method'))
 app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:true})) 
+
 
 
 
@@ -102,7 +105,7 @@ app.get('/edit/:id', async (요청, 응답) =>{
     const result = await db.collection('post').findOne({ _id : new ObjectId(id) })
     응답.render('edit.ejs', {result : result})
 })
-app.post('/edit', async (요청, 응답)=>{
+app.put('/edit', async (요청, 응답)=>{
     await db.collection('post').updateOne({ _id : new ObjectId(요청.body.id) },
       {$set : { title : 요청.body.title, content : 요청.body.content }
     })
