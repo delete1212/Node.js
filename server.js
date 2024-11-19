@@ -92,7 +92,7 @@ app.post('/detail/:postId/comment', async (요청, 응답) => {
             응답.send('댓글을 입력해주세요!')
         } else {
             await db.collection('post').updateOne({ _id: new ObjectId(Id)}, {$push: { comments: { text:요청.body.comments, createdAt: new Date()}}})
-            응답.redirect('/list')
+            응답.redirect('/detail/' + Id.toString())
         }
     } catch(e) {
         console.log(e)
@@ -111,6 +111,7 @@ app.put('/edit', async (요청, 응답)=>{
     })
     응답.redirect('/list')
 }) 
-app.delete('/delete/:id', async(요청, 응답)=>{
-    console.log(요청.params)
+app.delete('/delete', async(요청, 응답)=>{
+    let result = await db.collection('post').deleteOne({ _id : new ObjectId(요청.query.docid)})
+    응답.send('삭제완료')
 })
