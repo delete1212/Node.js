@@ -68,3 +68,25 @@ body {
   .delete {
     cursor: pointer;
   }
+  .page-box {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  .page-box:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  .page-box.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    pointer-events: none;
+  }

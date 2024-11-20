@@ -42,10 +42,12 @@ app.get('/about', (요청, 응답) => {
     응답.sendfile(__dirname + '/about.html')
 })
 
-app.get('/list', async (요청, 응답) => {
-    let result = await db.collection('post').find().toArray()
+app.get('/list/:page', async (요청, 응답) => {
+    let totalItems = await db.collection('post').countDocuments();
+    let i = 5 * (요청.params.page - 1)
+    let result = await db.collection('post').find().skip(i).limit(5).toArray()
     // 응답.send(result[0].title)
-    응답.render('list.ejs', { posts : result })
+    응답.render('list.ejs', { posts : result, totalItems : totalItems })
 })
 
 app.get('/time', async (요청, 응답) => {
@@ -62,7 +64,7 @@ app.post('/add', async (요청, 응답) => {
             응답.send('제목을 입력해주세요!')
         } else {
             await db.collection('post').insertOne({title : 요청.body.title, content : 요청.body.content})
-            응답.redirect('/list')
+            응답.redirect('/list/1')
         }
     } catch(e) {
         console.log(e)

@@ -20,7 +20,12 @@
             <span class="delete" data-id="<%= posts[i]._id %>">🗑️</span>
           </div>
           <% } %>
-        </div> 
+        </div>
+        <% for (let i = 0; i < Math.ceil(totalItems / 5) ; i++){ %>
+          <a class="page-box" href="/list/<%= i + 1 %>">
+            <p><%= i + 1 %></p>
+          </a>
+        <% } %>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
 
@@ -45,7 +50,7 @@
             if(r.status == 200) {
               return r.json()
             } else {
-              //서버가 에러코드전송시 실행할코드
+              //alert("")
             }
           })
           .then((result)=>{ 
