@@ -8,7 +8,18 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:true})) 
 
+const session = require('express-session')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 
+app.use(passport.initialize())
+app.use(session({
+  secret: '암호화에 쓸 비번',
+  resave : false,
+  saveUninitialized : false
+}))
+
+app.use(passport.session()) 
 
 
 const { MongoClient, ObjectId } = require('mongodb')
@@ -116,4 +127,31 @@ app.put('/edit', async (요청, 응답)=>{
 app.delete('/delete', async(요청, 응답)=>{
     let result = await db.collection('post').deleteOne({ _id : new ObjectId(요청.query.docid)})
     응답.send('삭제완료')
+})
+
+passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
+    let result = await db.collection('user').findOne({ username : 입력한아이디})
+    if (!result) {
+      return cb(null, false, { message: '아이디 DB에 없음' })
+    }
+    if (result.password == 입력한비번) {
+      return cb(null, result)
+    } else {
+      return cb(null, false, { message: '비번불일치' });
+    }
+  }))
+
+app.get('/login', async (요청, 응답)=>{
+    응답.render('login.ejs')
+})
+app.post('/login', async (요청, 응답)=>{
+    passport.authenticate('local', (error, user, info)=>{
+        if (error) return 응답.status(500).json(error)
+        if (!user) return 응답.status(500).json(info.message)
+        요청.logIn(user, (err)=>{
+            if(err) return next(err)
+            응답.redirect('/')
+        })
+     })(요청, 응답, next)
+    
 })
