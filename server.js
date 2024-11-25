@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
+
 const methoOverride = require('method-override')
+const bcrypt = require('bcrypt')
 
 app.use(methoOverride('_method'))
 app.use(express.static(__dirname + '/public'))
@@ -167,4 +169,18 @@ app.post('/login', async (요청, 응답, next) => {
             응답.redirect('/');
         });
     })(요청, 응답, next);
-});
+})
+
+app.get('/register', (요청, 응답) => {
+    응답.render('register.ejs')
+})
+app.post('/register', async(요청, 응답) => {
+
+    let 해시 = await bcrypt.hash(요청.body.password, 10)
+
+    await db.collection('user').insertOne({
+        username : 요청.body.username,
+        password : 해시
+    })
+    응답.redirect('/')
+})
