@@ -8,12 +8,29 @@
 </head>
 <body class="grey-bg">
     <%- include('nav.ejs') %>
-    <form class="form-box" action="/register" method="POST">
+    <form id="loginform" class="form-box" action="/register" method="POST">
         <h4>가입</h4>
         <input name="username">
-        <input name="password" type="password">
+        <input id="input1" name="password" type="password" placeholder="비밀번호">
+        <input id="input2" name="password-check" type="password" placeholder="비밀번호 확인">
         <button type="submit">전송</button>
     </form> 
+
+    <script>
+        const form = document.getElementById('loginform');
+
+        form.addEventListener('submit', function (event) {
+
+                const input1 = document.getElementById('input1').value;
+                const input2 = document.getElementById('input2').value;
+            if (input1 !== input2) {
+                alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+                event.preventDefault();
+            } else {
+                //폼 제출 허용
+            }
+        });
+    </script>
     
 </body>
 </html>

@@ -13,6 +13,18 @@ app.use(express.urlencoded({extended:true}))
 const session = require('express-session')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const MongoStore = require('connect-mongo')
+
+app.use(session({
+    resave : false,
+    saveUninitialized : false,
+    secret : 'qwer1234',
+    cookie : {maxAge : 1000 * 60},
+    store : MongoStore.create({
+        mongoUrl : 'mongodb+srv://admin1234:qwer1234@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster',
+        dbName : 'forum',
+    })
+}))
 
 app.use(passport.initialize())
 app.use(session({
@@ -148,7 +160,8 @@ passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) =
     if (!result) {
       return cb(null, false, { message: '아이디 DB에 없음' })
     }
-    if (result.password == 입력한비번) {
+
+    if(await bcrypt.compare(입력한비번, result.password)){
       return cb(null, result)
     } else {
       return cb(null, false, { message: '비번불일치' });
@@ -175,6 +188,13 @@ app.get('/register', (요청, 응답) => {
     응답.render('register.ejs')
 })
 app.post('/register', async(요청, 응답) => {
+
+    
+    const user = await db.collection('user').findOne({ username : 요청.body.username });
+    if (user) {
+        return 응답.status(400).json({ message: '닉네임 중복됨' });
+    }
+    
 
     let 해시 = await bcrypt.hash(요청.body.password, 10)
 
