@@ -63,13 +63,25 @@ new MongoClient(url).connect().then((client)=>{
   console.log(err)
 })
 
-function loginplz(요청, 응답){
+function loginplz(요청, 응답, next){
     if(!요청.user){
         응답.send('로그인을 해주세요')
     }
+    next()
+}
+function timeCheck(요청, 응답, next){
+    console.log(new date())
+    next()
+}
+function logCheck(요청, 응답, next){
+    if(요청.body.username=='' || 요청.body.password==''){
+        응답.send('닉네임 및 비밀번호가 비어있습니다.')
+    } else {
+        next()
+    }
 }
 
-app.get('/', loginplz, (요청, 응답) => {
+app.get('/', (요청, 응답) => {
     응답.sendfile(__dirname + '/index.html')
 })
 
@@ -78,15 +90,15 @@ app.get('/news', (요청, 응답) => {
     응답.send('흐림')
 })
 
-app.get('/shop', function(요청, 응답){
+app.get('/shop', loginplz, function(요청, 응답){
     응답.send('쇼핑')
 })
 
-app.get('/about', (요청, 응답) => {
+app.get('/about', loginplz, (요청, 응답) => {
     응답.sendfile(__dirname + '/about.html')
 })
 
-app.get('/list/:page', async (요청, 응답) => {
+app.get('/list/:page', timeCheck, async (요청, 응답) => {
     let totalItems = await db.collection('post').countDocuments();
     let i = 5 * (요청.params.page - 1)
     let result = await db.collection('post').find().skip(i).limit(5).toArray()
@@ -183,7 +195,7 @@ app.get('/login', async (요청, 응답)=>{
     console.log(요청.user)
     응답.render('login.ejs')
 })
-app.post('/login', async (요청, 응답, next) => {
+app.post('/login', logCheck, async (요청, 응답, next) => {
     passport.authenticate('local', (error, user, info) => {
         if (error) return 응답.status(500).json(error);
         if (!user) return 응답.status(400).json(info.message);
@@ -198,7 +210,7 @@ app.post('/login', async (요청, 응답, next) => {
 app.get('/register', (요청, 응답) => {
     응답.render('register.ejs')
 })
-app.post('/register', async(요청, 응답) => {
+app.post('/register', logCheck, async(요청, 응답) => {
 
     
     const user = await db.collection('user').findOne({ username : 요청.body.username });
