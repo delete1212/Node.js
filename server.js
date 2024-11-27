@@ -3,6 +3,7 @@ const app = express()
 
 const methoOverride = require('method-override')
 const bcrypt = require('bcrypt')
+require('dotenv').config()
 
 app.use(methoOverride('_method'))
 app.use(express.static(__dirname + '/public'))
@@ -19,9 +20,9 @@ app.use(session({
     resave : false,
     saveUninitialized : false,
     secret : 'qwer1234',
-    cookie : {maxAge : 1000 * 60},
+    cookie : {maxAge : 60 * 60 * 1000},
     store : MongoStore.create({
-        mongoUrl : 'mongodb+srv://admin1234:qwer1234@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster',
+        mongoUrl : process.env.DB_URL,
         dbName : 'forum',
     })
 }))
@@ -51,18 +52,24 @@ passport.serializeUser((user, done) => {
 const { MongoClient, ObjectId } = require('mongodb')
 
 let db
-const url = 'mongodb+srv://admin1234:qwer1234@mechacluster.ryvdc.mongodb.net/?retryWrites=true&w=majority&appName=MechaCluster'
+const url = proces.env.DB_URL
 new MongoClient(url).connect().then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
-  app.listen(8080, () => {
+  app.listen(process.env.PORT, () => {
     console.log('http://localhost:8080 에서 서버 실행중')
 })
 }).catch((err)=>{
   console.log(err)
 })
 
-app.get('/', (요청, 응답) => {
+function loginplz(요청, 응답){
+    if(!요청.user){
+        응답.send('로그인을 해주세요')
+    }
+}
+
+app.get('/', loginplz, (요청, 응답) => {
     응답.sendfile(__dirname + '/index.html')
 })
 
@@ -92,7 +99,11 @@ app.get('/time', async (요청, 응답) => {
 })
 
 app.get('/write', (요청, 응답) =>{
-    응답.render('write.ejs')
+    let usercheck = 요청.user
+    if(usercheck){
+        응답.render('write.ejs')
+    }
+    응답.send('로그인을 해주세요!')
 })
 
 app.post('/add', async (요청, 응답) => {
