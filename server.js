@@ -16,6 +16,26 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const MongoStore = require('connect-mongo')
 
+const { S3Client } = require('@aws-sdk/client-s3')
+const multer = require('multer')
+const multerS3 = require('multer-3')
+const s3 = new S3Client({
+    region : 'ap-northeast-2',
+    credentials : {
+        accessKeyId : process.env.Accesskey,
+        secretAccessKey : process.env.SecAccessKey
+    }
+})
+const upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'deltabucks',
+      key: function (요청, file, cb) {
+        cb(null, Date.now().toString())
+      }
+    })
+  })
+
 app.use(session({
     resave : false,
     saveUninitialized : false,
@@ -118,12 +138,15 @@ app.get('/write', (요청, 응답) =>{
     응답.send('로그인을 해주세요!')
 })
 
-app.post('/add', async (요청, 응답) => {
+app.post('/add', upload.single('img1'), async (요청, 응답) => {
     try{
+        upload.single('img1')(요청, 응답, (err)=>{
+            if (err) return 응답.send('에러남')
+            })
         if (요청.body.title == ''){
             응답.send('제목을 입력해주세요!')
         } else {
-            await db.collection('post').insertOne({title : 요청.body.title, content : 요청.body.content})
+            await db.collection('post').insertOne({title : 요청.body.title, content : 요청.body.content, img : 요청.file.location})
             응답.redirect('/list/1')
         }
     } catch(e) {
