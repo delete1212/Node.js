@@ -13,6 +13,7 @@
         <%- include('nav.ejs')%>
         <div class="detail-bg">
             <h4><%= post.title %></h4>
+            <p><%= user.username %></p>
             <p><%= post.content %></p>
             <p><img src="<%= post.file.location %>"></p>
         </div>

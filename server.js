@@ -18,7 +18,7 @@ const MongoStore = require('connect-mongo')
 
 const { S3Client } = require('@aws-sdk/client-s3')
 const multer = require('multer')
-const multerS3 = require('multer-3')
+const multerS3 = require('multer-s3');
 const s3 = new S3Client({
     region : 'ap-northeast-2',
     credentials : {
@@ -72,7 +72,7 @@ passport.serializeUser((user, done) => {
 const { MongoClient, ObjectId } = require('mongodb')
 
 let db
-const url = proces.env.DB_URL
+const url = process.env.DB_URL
 new MongoClient(url).connect().then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
@@ -250,3 +250,5 @@ app.post('/register', logCheck, async(요청, 응답) => {
     })
     응답.redirect('/')
 })
+
+app.use('/shop', require('./routes/shop.js'))
