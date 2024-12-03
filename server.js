@@ -70,10 +70,12 @@ passport.serializeUser((user, done) => {
   })
 
 const { MongoClient, ObjectId } = require('mongodb')
+const connectDB = require('./database.js')
+
+let connectDB = require('./database.js')
 
 let db
-const url = process.env.DB_URL
-new MongoClient(url).connect().then((client)=>{
+connectDB.then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
   app.listen(process.env.PORT, () => {
@@ -252,3 +254,8 @@ app.post('/register', logCheck, async(요청, 응답) => {
 })
 
 app.use('/shop', require('./routes/shop.js'))
+
+app.get('/search', async (요청, 응답) => {
+    let result = db.collection('post').find({title : 요청.query.val}).toArray()
+    응답.render('search.ejs', { posts : result})
+})
