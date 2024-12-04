@@ -48,11 +48,6 @@ app.use(session({
 }))
 
 app.use(passport.initialize())
-app.use(session({
-  secret: '암호화에 쓸 비번',
-  resave : false,
-  saveUninitialized : false
-}))
 
 passport.serializeUser((user, done) => {
     console.log(user)
@@ -72,8 +67,6 @@ passport.serializeUser((user, done) => {
 const { MongoClient, ObjectId } = require('mongodb')
 const connectDB = require('./database.js')
 
-let connectDB = require('./database.js')
-
 let db
 connectDB.then((client)=>{
   console.log('DB연결성공')
@@ -92,7 +85,7 @@ function loginplz(요청, 응답, next){
     next()
 }
 function timeCheck(요청, 응답, next){
-    console.log(new date())
+    console.log(new Date())
     next()
 }
 function logCheck(요청, 응답, next){
@@ -104,7 +97,7 @@ function logCheck(요청, 응답, next){
 }
 
 app.get('/', (요청, 응답) => {
-    응답.sendfile(__dirname + '/index.html')
+    응답.sendFile(__dirname + '/index.html')
 })
 
 app.get('/news', (요청, 응답) => {
@@ -117,7 +110,7 @@ app.get('/shop', loginplz, function(요청, 응답){
 })
 
 app.get('/about', loginplz, (요청, 응답) => {
-    응답.sendfile(__dirname + '/about.html')
+    응답.sendFile(__dirname + '/about.html')
 })
 
 app.get('/list/:page', timeCheck, async (요청, 응답) => {
@@ -256,6 +249,8 @@ app.post('/register', logCheck, async(요청, 응답) => {
 app.use('/shop', require('./routes/shop.js'))
 
 app.get('/search', async (요청, 응답) => {
-    let result = db.collection('post').find({title : 요청.query.val}).toArray()
+    let result = await db.collection('post')
+    .find({ $text : { $search : 요청.query.val } }).toArray()
     응답.render('search.ejs', { posts : result})
 })
+
