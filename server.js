@@ -141,7 +141,13 @@ app.post('/add', upload.single('img1'), async (요청, 응답) => {
         if (요청.body.title == ''){
             응답.send('제목을 입력해주세요!')
         } else {
-            await db.collection('post').insertOne({title : 요청.body.title, content : 요청.body.content, img : 요청.file.location})
+            await db.collection('post').insertOne({
+                title : 요청.body.title,
+                content : 요청.body.content,
+                img : 요청.file ? 요청.file.location : '',
+                user : 요청.user._id,
+                username : 요청.user.username
+            })
             응답.redirect('/list/1')
         }
     } catch(e) {
@@ -192,7 +198,10 @@ app.put('/edit', async (요청, 응답)=>{
     응답.redirect('/list')
 }) 
 app.delete('/delete', async(요청, 응답)=>{
-    let result = await db.collection('post').deleteOne({ _id : new ObjectId(요청.query.docid)})
+    await db.collection('post').deleteOne({
+        _id : new ObjectId(요청.query.docid),
+        user : new ObjectId(요청.user._id)
+    })
     응답.send('삭제완료')
 })
 
@@ -249,8 +258,15 @@ app.post('/register', logCheck, async(요청, 응답) => {
 app.use('/shop', require('./routes/shop.js'))
 
 app.get('/search', async (요청, 응답) => {
+        let 검색조건 = [
+          {$search : {
+            index : 'title_index',
+            text : { query : '요청.query.val', path : 'title' }
+          }}
+        ]
+
     let result = await db.collection('post')
-    .find({ $text : { $search : 요청.query.val } }).toArray()
+    .find({ $text : { $search : 요청.query.val } }).aggregate(검색조건).toArray()
     응답.render('search.ejs', { posts : result})
 })
 
