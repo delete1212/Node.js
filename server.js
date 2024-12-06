@@ -40,7 +40,12 @@ app.use(session({
     resave : false,
     saveUninitialized : false,
     secret : 'qwer1234',
-    cookie : {maxAge : 60 * 60 * 1000},
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+    },
     store : MongoStore.create({
         mongoUrl : process.env.DB_URL,
         dbName : 'forum',
@@ -48,6 +53,7 @@ app.use(session({
 }))
 
 app.use(passport.initialize())
+app.use(passport.session())
 
 passport.serializeUser((user, done) => {
     console.log(user)
@@ -120,24 +126,23 @@ app.get('/list/:page', timeCheck, async (요청, 응답) => {
     // 응답.send(result[0].title)
     응답.render('list.ejs', { posts : result, totalItems : totalItems })
 })
+app.get('/list', async (요청, 응답) => {
+    응답.redirect('/list/1')
+})
 
 app.get('/time', async (요청, 응답) => {
     응답.render('time.ejs', { date : new Date() })
 })
 
 app.get('/write', (요청, 응답) =>{
-    let usercheck = 요청.user
-    if(usercheck){
-        응답.render('write.ejs')
+    if(요청.user){
+        return 응답.render('write.ejs', { username: 요청.user.username })
     }
     응답.send('로그인을 해주세요!')
 })
 
 app.post('/add', upload.single('img1'), async (요청, 응답) => {
     try{
-        upload.single('img1')(요청, 응답, (err)=>{
-            if (err) return 응답.send('에러남')
-            })
         if (요청.body.title == ''){
             응답.send('제목을 입력해주세요!')
         } else {
