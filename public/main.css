@@ -102,3 +102,14 @@ body {
     border-radius: 5px;
     vertical-align: middle;
   } 
+  .container {
+    font-family: arial;
+    font-size: 24px;
+    margin: 25px;
+    width: 350px;
+    height: 200px;
+  }
+  .flex{
+    display: flex;
+    text-align: center;
+  }
