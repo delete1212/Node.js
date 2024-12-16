@@ -124,7 +124,7 @@ app.get('/list/:page', timeCheck, async (요청, 응답) => {
     let i = 5 * (요청.params.page - 1)
     let result = await db.collection('post').find().skip(i).limit(5).toArray()
     // 응답.send(result[0].title)
-    응답.render('list.ejs', { posts : result, totalItems : totalItems })
+    응답.render('list.ejs', { posts : result, totalItems : totalItems, user: user })
 })
 app.get('/list', async (요청, 응답) => {
     응답.redirect('/list/1')
