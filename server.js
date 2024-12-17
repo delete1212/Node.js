@@ -124,7 +124,7 @@ app.get('/list/:page', timeCheck, async (요청, 응답) => {
     let i = 5 * (요청.params.page - 1)
     let result = await db.collection('post').find().skip(i).limit(5).toArray()
     // 응답.send(result[0].title)
-    응답.render('list.ejs', { posts : result, totalItems : totalItems, user: user })
+    응답.render('list.ejs', { posts : result, totalItems : totalItems, user: 요청.user || null })
 })
 app.get('/list', async (요청, 응답) => {
     응답.redirect('/list/1')
@@ -225,7 +225,7 @@ passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) =
 
 app.get('/login', async (요청, 응답)=>{
     console.log(요청.user)
-    응답.render('login.ejs')
+    응답.render('login.ejs', {user: 요청.user || null})
 })
 app.post('/login', logCheck, async (요청, 응답, next) => {
     passport.authenticate('local', (error, user, info) => {

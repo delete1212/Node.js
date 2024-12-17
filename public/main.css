@@ -10,6 +10,10 @@ body {
   .nav a {
     margin-right: 10px;
   }
+  .nav .right {
+    margin-left: auto;
+    display: flex;
+  }
   .logo {
     font-weight: bold;
   }

@@ -7,7 +7,10 @@
     <link href="\main.css" rel="styleSheet">
 </head>
 <body class="grey-bg">
-    <%- include('nav.ejs') %>
+    <div class="nav">
+        <a class="logo">AppleForum</a>
+        <a href="/list">list</a>
+    </div>
     <form id="loginform" class="form-box" action="/register" method="POST">
         <h4>가입</h4>
         <input name="username">

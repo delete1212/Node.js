@@ -2,11 +2,13 @@
     <a class="logo">AppleForum</a>
     <a href="/list">list</a>
 
-    <% if (user) { %>
-        <a style="text-align: left;">Welcome, <%= user.name %>!</a>
-        <a style="text-align: left;" href="/logout">Logout</a>
-    <% } else { %>
-        <a style="text-align: left;">Welcome, Guest!</a>
-        <a href="/login">Login</a>
-    <% } %>
+    <div class="right">
+        <% if (user) { %>
+            <a style="text-align: left;" href="/logout">Logout</a>
+            <a style="text-align: left;">Welcome, <%= user.name %>!</a>
+        <% } else { %>
+                <a href="/login">Login</a>
+                <a style="text-align: left;">Welcome, Guest!</a>
+        <% } %>
+    </div>
 </div> 
