@@ -275,3 +275,13 @@ app.get('/search', async (요청, 응답) => {
     응답.render('search.ejs', { posts : result})
 })
 
+app.get('/chatlist/:page', timeCheck, async (요청, 응답) => {
+    let totalItems = await db.collection('chat').countDocuments();
+    let i = 5 * (요청.params.page - 1)
+    let result = await db.collection('chat').find().skip(i).limit(5).toArray()
+    // 응답.send(result[0].title)
+    응답.render('chatlist.ejs', { posts : result, totalItems : totalItems, user: 요청.user || null })
+})
+app.get('/chatlist', async (요청, 응답) => {
+    응답.redirect('/chatlist/1')
+})
