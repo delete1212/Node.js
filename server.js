@@ -166,7 +166,7 @@ app.get('/detail/:aaaa', async (요청, 응답)=>{
         const id = 요청.params.aaaa
         if(ObjectId.isValid(id)){
             const result = await db.collection('post').findOne({ _id : new ObjectId(id) })
-            응답.render('detail.ejs', {post : result})
+            응답.render('detail.ejs', {post : result, user: 요청.user || null})
         } else {
             응답.status(400).send('잘못된 요청')
         }
@@ -284,4 +284,35 @@ app.get('/chatlist/:page', timeCheck, async (요청, 응답) => {
 })
 app.get('/chatlist', async (요청, 응답) => {
     응답.redirect('/chatlist/1')
+})
+
+app.get('/addfriend/:postId', async (요청, 응답) => {
+    try {
+        if (!요청.user) {
+            return 응답.status(401).send('로그인을 해주세요!')
+        }
+        const postId = 요청.params.postId;
+        const 글쓴이ID = await db.collection('post').findOne({ _id: new ObjectId(postId) }).user
+
+        if (new ObjectId(요청.user.id).equals(글쓴이ID)) {
+            return 응답.status(400).send('본인을 친구로 추가할 수 없습니다.')
+        }
+
+        await db.collection('user').updateOne(
+            { _id: new ObjectId(요청.user.id) },
+            { $addToSet: { friends: 글쓴이ID } }
+        )
+
+        return 응답.redirect('/')
+    } catch (err) {
+        console.error('오류 발생:', err)
+        return 응답.status(500).send('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+    }
+});
+
+
+app.get('/chat/request', async (요청, 응답)=>{
+    await bcrypt.collection('chatroom').insertOne({
+        member: []
+    })
 })

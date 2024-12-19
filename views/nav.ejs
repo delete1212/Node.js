@@ -1,11 +1,12 @@
 <div class="nav">
     <a class="logo">AppleForum</a>
     <a href="/list">list</a>
+    <a href="/chatlist">chat</a>
 
     <div class="right">
         <% if (user) { %>
             <a style="text-align: left;" href="/logout">Logout</a>
-            <a style="text-align: left;">Welcome, <%= user.name %>!</a>
+            <a style="text-align: left;">Welcome, <%= user.username %>!</a>
         <% } else { %>
                 <a href="/login">Login</a>
                 <a style="text-align: left;">Welcome, Guest!</a>

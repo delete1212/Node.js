@@ -13,7 +13,7 @@
         <%- include('nav.ejs')%>
         <div class="detail-bg">
             <h4><%= post.title %></h4>
-            <p><%= post.username %></p>
+            <p>글쓴이:<%= post.username %> <a href="/addfriend/<%= post._id %>">친추</a></p>
             <p><%= post.content %></p>
             <% if (post.img) { %>
                 <p><img src="<%= post.img %>" alt="Post image"></p>

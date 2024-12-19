@@ -26,17 +26,22 @@ body {
     margin: 20px;
     border-radius: 5px;
   }
-  .container {
+  .chat-box{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
-  .left {
-    width: 40%;
+  .white-bg .left{
+    flex-grow: 1;
+    width: 50%;
   }
-  .right {
-    width: 40%;
-    margin-left: auto;
+  .white-bg .right{
+    flex-grow: 1;
+    width: 50%
   }
+
   .list-box {
     padding : 10px;
     border-bottom: 1px solid#eee;
@@ -143,4 +148,16 @@ body {
   border : none;
   background : lightgrey;
   border-radius: 5px;
+}
+
+
+
+
+
+
+@media (max-width: 400px) {
+  .white-bg .left, .white-bg .right {
+    width: 100%;
+    margin-left: 0;
+  }
 }
