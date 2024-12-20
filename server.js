@@ -239,6 +239,15 @@ app.post('/login', logCheck, async (요청, 응답, next) => {
     })(요청, 응답, next);
 })
 
+app.get('/logout', (요청, 응답, next) => {
+    요청.logout((err) => {
+        if (err) {
+            return next(err)
+        }
+        응답.redirect('/login')
+    })
+})
+
 app.get('/register', (요청, 응답) => {
     응답.render('register.ejs')
 })
@@ -255,7 +264,7 @@ app.post('/register', logCheck, async(요청, 응답) => {
 
     await db.collection('user').insertOne({
         username : 요청.body.username,
-        password : 해시
+        password : 해시,
     })
     응답.redirect('/')
 })
@@ -275,44 +284,15 @@ app.get('/search', async (요청, 응답) => {
     응답.render('search.ejs', { posts : result})
 })
 
-app.get('/chatlist/:page', timeCheck, async (요청, 응답) => {
-    let totalItems = await db.collection('chat').countDocuments();
-    let i = 5 * (요청.params.page - 1)
-    let result = await db.collection('chat').find().skip(i).limit(5).toArray()
-    // 응답.send(result[0].title)
-    응답.render('chatlist.ejs', { posts : result, totalItems : totalItems, user: 요청.user || null })
-})
-app.get('/chatlist', async (요청, 응답) => {
-    응답.redirect('/chatlist/1')
-})
-
-app.get('/addfriend/:postId', async (요청, 응답) => {
-    try {
-        if (!요청.user) {
-            return 응답.status(401).send('로그인을 해주세요!')
-        }
-        const postId = 요청.params.postId;
-        const 글쓴이ID = await db.collection('post').findOne({ _id: new ObjectId(postId) }).user
-
-        if (new ObjectId(요청.user.id).equals(글쓴이ID)) {
-            return 응답.status(400).send('본인을 친구로 추가할 수 없습니다.')
-        }
-
-        await db.collection('user').updateOne(
-            { _id: new ObjectId(요청.user.id) },
-            { $addToSet: { friends: 글쓴이ID } }
-        )
-
-        return 응답.redirect('/')
-    } catch (err) {
-        console.error('오류 발생:', err)
-        return 응답.status(500).send('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
-    }
-});
-
-
 app.get('/chat/request', async (요청, 응답)=>{
-    await bcrypt.collection('chatroom').insertOne({
-        member: []
+    await db.collection('chatroom').insertOne({
+      member : [요청.user._id, new ObjectId(요청.query.writerId)],
+      date : new Date()
     })
+    응답.redirect('채팅방목록페이지')
 })
+  
+app.get('/chat/list', async (요청, 응답)=>{
+    let result = await db.collection('chatroom').find({ member : 요청.user._id }).toArray()
+    응답.render('chatlist.ejs', {글목록 : result, user: 요청.user || null})
+}) 
