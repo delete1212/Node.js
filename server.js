@@ -289,10 +289,22 @@ app.get('/chat/request', async (요청, 응답)=>{
       member : [요청.user._id, new ObjectId(요청.query.writerId)],
       date : new Date()
     })
-    응답.redirect('채팅방목록페이지')
+    응답.redirect('/chat/list')
 })
   
 app.get('/chat/list', async (요청, 응답)=>{
     let result = await db.collection('chatroom').find({ member : 요청.user._id }).toArray()
     응답.render('chatlist.ejs', {글목록 : result, user: 요청.user || null})
 }) 
+app.get('/chat/detail/:id', async (요청, 응답)=>{
+    const check = await db.collection('chatroom').findOne({ 
+        _id: new ObjectId(요청.params.id),
+        member: new ObjectId(요청.user._id)
+    })
+    if(check){
+        let result = await db.collection('chatroom').findOne({ _id : new ObjectId(요청.params.id) })
+        응답.render('chatdetail.ejs', {글목록 : [result], user: 요청.user})
+    } else {
+        응답.send('접근할 수 없는 채팅방입니다!')
+    }
+})
