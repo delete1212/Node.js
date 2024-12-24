@@ -10,7 +10,7 @@
     
     <body class="grey-bg">
 
-        <%- include('nav.ejs')%>
+      <%- include('nav.ejs', { user: user })%>
         <div class="detail-bg">
             <div class="chat-screen">
               <div class="chat-box"><span>안녕하세요</span></div>
@@ -22,6 +22,24 @@
             <input class="chat-input">
             <button class="chat-button">전송</button>
       </div> 
+
+      <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.2/client-dist/socket.io.min.js"></script>
+        <script>
+          const socket = io() 
+          socket.emit('ask-joim', '1')
+
+          document.querySelector('.chat-button').addEventListener('click',
+            function(){
+              socket.emit('message', { msg : '반가워', room : '1' })
+            })
+
+          socket.on('name', (data)=>{
+            console.log(data)
+          })
+          socket.on('broadcast', (data)=>{
+            console.log(data)
+          })
+        </script>
 
     </body>
 </body>

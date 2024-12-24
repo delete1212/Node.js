@@ -36,6 +36,11 @@ const upload = multer({
     })
   })
 
+const { createServer } = require('http')
+const { Server } = require('socket.io')
+const server = createServer(app)
+const io = new Server(server) 
+
 app.use(session({
     resave : false,
     saveUninitialized : false,
@@ -77,7 +82,7 @@ let db
 connectDB.then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
-  app.listen(process.env.PORT, () => {
+  server.listen(process.env.PORT, () => {
     console.log('http://localhost:8080 에서 서버 실행중')
 })
 }).catch((err)=>{
@@ -307,4 +312,20 @@ app.get('/chat/detail/:id', async (요청, 응답)=>{
     } else {
         응답.send('접근할 수 없는 채팅방입니다!')
     }
+})
+
+io.on('connection', (socket)=>{
+    console.log('웹소켓연결됨')
+
+    socket.on('test', (data)=>{
+        console.log('test', data)
+        io.emit('name', 'kim')
+    })
+    socket.on('ask-join', (data)=>{
+        socket.join(data)
+    })
+    socket.on('message', (data)=>{
+        console.log(data)
+        io.to(data.room).emit('broacast', data.msg)
+    })
 })
