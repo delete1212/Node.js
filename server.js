@@ -315,17 +315,12 @@ app.get('/chat/detail/:id', async (요청, 응답)=>{
 })
 
 io.on('connection', (socket)=>{
-    console.log('웹소켓연결됨')
-
-    socket.on('test', (data)=>{
-        console.log('test', data)
-        io.emit('name', 'kim')
-    })
-    socket.on('ask-join', (data)=>{
+    socket.on('ask-join', async (data) => {
+        console.log(data)
         socket.join(data)
     })
-    socket.on('message', (data)=>{
+    socket.on('message-send', async (data)=>{
         console.log(data)
-        io.to(data.room).emit('broacast', data.msg)
+        io.to(data.room).emit('message-broadcast', data.msg)
     })
 })

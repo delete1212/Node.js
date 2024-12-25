@@ -11,6 +11,7 @@
     <body class="grey-bg">
 
       <%- include('nav.ejs', { user: user })%>
+      <%= JSON.stringify(글목록) %>
         <div class="detail-bg">
             <div class="chat-screen">
               <div class="chat-box"><span>안녕하세요</span></div>
@@ -25,19 +26,19 @@
 
       <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.2/client-dist/socket.io.min.js"></script>
         <script>
-          const socket = io() 
-          socket.emit('ask-joim', '1')
+          const socket = io()
+          socket.emit('ask-join', '<%= 글목록._id %>')
 
-          document.querySelector('.chat-button').addEventListener('click',
-            function(){
-              socket.emit('message', { msg : '반가워', room : '1' })
-            })
-
-          socket.on('name', (data)=>{
-            console.log(data)
+          document.querySelector('.chat-button').addEventListener('click', function () {
+            let chat = document.querySelector('.chat-input').value
+            let roomid = '<%= 글목록._id %>'
+            socket.emit('message-send', { room: roomid, msg: chat })
           })
-          socket.on('broadcast', (data)=>{
-            console.log(data)
+
+          socket.on('message-broacast', (data) => {
+            document.querySelector('.chat-screen').insertAdjacentHTML('beforeend',
+              `<div class="chat-box"><span>${data}</span></div>`
+            )
           })
         </script>
 
