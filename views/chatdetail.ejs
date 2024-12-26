@@ -14,9 +14,7 @@
       <%= JSON.stringify(글목록) %>
         <div class="detail-bg">
             <div class="chat-screen">
-              <div class="chat-box"><span>안녕하세요</span></div>
-              <div class="chat-box"><span>안녕하세요</span></div>
-              <div class="chat-box mine"><span>안녕하세요</span></div>
+
             </div>
           </div>
           <div class="chat-form">
@@ -27,18 +25,26 @@
       <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.2/client-dist/socket.io.min.js"></script>
         <script>
           const socket = io()
-          socket.emit('ask-join', '<%= 글목록._id %>')
+          socket.emit('ask-join', '<%= 글목록[0]._id %>')
 
           document.querySelector('.chat-button').addEventListener('click', function () {
             let chat = document.querySelector('.chat-input').value
-            let roomid = '<%= 글목록._id %>'
-            socket.emit('message-send', { room: roomid, msg: chat })
+            let roomid = '<%= 글목록[0]._id %>'
+            let sender = '<%= user._id %>'
+            socket.emit('message-send', { room: roomid, msg: chat, sender: sender })
           })
 
-          socket.on('message-broacast', (data) => {
-            document.querySelector('.chat-screen').insertAdjacentHTML('beforeend',
-              `<div class="chat-box"><span>${data}</span></div>`
-            )
+          socket.on('message-broadcast', (data) => {
+            const Mine = '<%= user._id %>'
+            if(data.sender===Mine){
+              document.querySelector('.chat-screen').insertAdjacentHTML('beforeend',
+                `<div class="chat-box mine"><span>${data.msg}</span></div>`
+              )
+            } else {
+              document.querySelector('.chat-screen').insertAdjacentHTML('beforeend',
+                `<div class="chat-box"><span>${data.msg}</span></div>`
+              )
+            }
           })
         </script>
 

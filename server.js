@@ -292,7 +292,9 @@ app.get('/search', async (요청, 응답) => {
 app.get('/chat/request', async (요청, 응답)=>{
     await db.collection('chatroom').insertOne({
       member : [요청.user._id, new ObjectId(요청.query.writerId)],
-      date : new Date()
+      date : new Date(),
+      chat : [],
+      order : []
     })
     응답.redirect('/chat/list')
 })
@@ -321,6 +323,9 @@ io.on('connection', (socket)=>{
     })
     socket.on('message-send', async (data)=>{
         console.log(data)
-        io.to(data.room).emit('message-broadcast', data.msg)
+        await db.collection('chatroom').updateOne({ _id : new ObjectId(data._id) },
+        {$set : { chat: data.msg, order: sender }
+            })
+        io.to(data.room).emit('message-broadcast', { msg: data.msg, sender: data.sender })
     })
 })
