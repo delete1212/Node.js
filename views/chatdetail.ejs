@@ -13,14 +13,17 @@
       <%- include('nav.ejs', { user: user })%>
       <%= JSON.stringify(글목록) %>
         <div class="detail-bg">
-            <div class="chat-screen">
-
-            </div>
+          <div class="chat-screen">
+            <% for (let i = 0; i < 글목록[0].chat.length; i++){ %>
+              <% const isMine = user._id === 글목록[0].order[i] %>
+              <div class="<%= isMine ? 'chat-box mine' : 'chat-box' %>"><span><%= 글목록[0].chat[i] %></span></div>
+            <% } %>
           </div>
-          <div class="chat-form">
-            <input class="chat-input">
-            <button class="chat-button">전송</button>
-      </div> 
+        </div>
+        <div class="chat-form">
+          <input class="chat-input">
+          <button class="chat-button">전송</button>
+        </div> 
 
       <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.2/client-dist/socket.io.min.js"></script>
         <script>

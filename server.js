@@ -323,9 +323,11 @@ io.on('connection', (socket)=>{
     })
     socket.on('message-send', async (data)=>{
         console.log(data)
-        await db.collection('chatroom').updateOne({ _id : new ObjectId(data._id) },
-        {$set : { chat: data.msg, order: sender }
-            })
+        await db.collection('chatroom').updateOne({ _id : new ObjectId(data.room) },
+            {
+                $push: { chat: data.msg, order: data.sender },
+            }
+        )
         io.to(data.room).emit('message-broadcast', { msg: data.msg, sender: data.sender })
     })
 })
