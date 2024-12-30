@@ -331,3 +331,14 @@ io.on('connection', (socket)=>{
         io.to(data.room).emit('message-broadcast', { msg: data.msg, sender: data.sender })
     })
 })
+
+app.get('/stream/list', (요청, 응답) => {
+    응답.writeHead(200, {
+        "Connection": "keep-alive",
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+    })
+
+    응답.write('event: msg\n')
+    응답.write('data: babo\n\n')
+})
