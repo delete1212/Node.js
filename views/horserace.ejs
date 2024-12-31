@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+    <link href="\main.css" rel="styleSheet">
+</head>
+    
+    <body class="grey-bg">
+
+      <%- include('nav.ejs', { user: user })%>
+
+모양별 에이스 4장 선별 후 가로로 나열
+수직으로 카드 7장 나열
+이때 같은모양 5개 이상시 초기화 후 처음부터 다시
+모양 선택 버튼x4
+버튼누르면 게임시작 카드뽑기 반복(간격 존재)
+예)
+#
+#
+#
+#
+#
+#
+#
+  A B C D
+  | | | | 점수
+
+
+스크립트 구성
+card.js기능호출
+버튼 누르면 랜덤 카드 호출 반복
+호출한 카드 따라 A,B,C,D DIV박스 이동(+카운트)
+카운트가 8이되면 해당 모양 승리
+초기화
+
+연결:server.js-horserace.js-card.js
+
+    </body>
+</html>

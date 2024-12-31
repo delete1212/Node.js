@@ -342,3 +342,15 @@ app.get('/stream/list', (요청, 응답) => {
     응답.write('event: msg\n')
     응답.write('data: babo\n\n')
 })
+
+
+
+
+app.get('/game', async (요청, 응답)=>{
+
+    응답.render('game.ejs', { user: 요청.user || null })
+})
+app.get('/game/horserace', async (요청, 응답)=>{
+
+    응답.render('horserace.ejs', { user: 요청.user || null })
+})
