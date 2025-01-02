@@ -150,6 +150,15 @@ body {
   border-radius: 5px;
 }
 
+.horsebox {
+  background: #0a5c0a;
+  padding : 10px;
+  border: inset;
+  height: 80px;
+  width: 600px;
+  margin: 0 auto;
+}
+
 
 
 

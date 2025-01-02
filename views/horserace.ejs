@@ -11,6 +11,13 @@
 
       <%- include('nav.ejs', { user: user })%>
 
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
+      <div class="horsebox"></div>
 모양별 에이스 4장 선별 후 가로로 나열
 수직으로 카드 7장 나열
 이때 같은모양 5개 이상시 초기화 후 처음부터 다시
@@ -35,7 +42,16 @@ card.js기능호출
 카운트가 8이되면 해당 모양 승리
 초기화
 
-연결:server.js-horserace.js-card.js
+연결:server.js-game/(horserace.js-card.js)
 
+<script type="module" src="card.js"></script>
+<script type="module">
+  import { createDeck, selectCard } from './card.js';
+  createDeck()
+  console.log(selectCard(0))
+  selectCard(13)
+  selectCard(26)
+  selectCard(39)
+</script>
     </body>
 </html>
