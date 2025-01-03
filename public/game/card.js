@@ -27,10 +27,14 @@ export function drawCard() {
 }
 
 // 덱에서 선택 뽑기
-export function selectCard(a) {
-  const card = deck.splice(a, 1)[0]
-  usedCards.push(card)
-  return card
+export function selectCard(suit, value) {
+  const card = deck.findIndex(card => card.suit === suit && card.value === value)
+  if (card === -1) {
+    throw new Error(`Card not found`)
+  }
+  const [selectedCard] = deck.splice(card, 1)
+  usedCards.push(selectedCard)
+  return selectedCard
 }
 
 // 모듈 내보내기

@@ -151,12 +151,23 @@ body {
 }
 
 .horsebox {
-  background: #0a5c0a;
+  background: #3CB371;
   padding : 10px;
   border: inset;
-  height: 80px;
-  width: 600px;
+  height: 100px;
+  width: 400px;
   margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+.card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.card .red {
+  color: red;
 }
 
 
