@@ -11,15 +11,7 @@
 
       <%- include('nav.ejs', { user: user })%>
 
-      <div class="horsebox G"></div>
-      <div class="horsebox F"></div>
-      <div class="horsebox E"></div>
-      <div class="horsebox D"></div>
-      <div class="horsebox C"></div>
-      <div class="horsebox B"></div>
-      <div class="horsebox A"></div>
-      <div class="horsebox start"></div>
-모양별 에이스 4장 선별 후 가로로 나열
+      모양별 에이스 4장 선별 후 가로로 나열
 수직으로 카드 7장 나열
 이때 같은모양 5개 이상시 초기화 후 처음부터 다시
 모양 선택 버튼x4
@@ -45,54 +37,83 @@ card.js기능호출
 
 연결:server.js-game/card.js
 
+      <div class="horsebox 6"></div>
+      <div class="horsebox 5"></div>
+      <div class="horsebox 4"></div>
+      <div class="horsebox 3"></div>
+      <div class="horsebox 2"></div>
+      <div class="horsebox 1"></div>
+      <div class="horsebox 0"></div>
+      <div class="horsebox start"></div>
+
+
 <script type="module" src="card.js"></script>
 <script type="module">
   import { createDeck, drawCard, selectCard } from './card.js';
-  createDeck()
-  const HA = selectCard("♥", "A")
-  const CardHA = `<div class="card">
-                  <span class="red">${HA.suit}</span>
-                  <span>${HA.value}</span>
-                  </div>`
-  document.querySelector('.start').insertAdjacentHTML('beforeend', CardHA)
-  const DA = selectCard("♦", "A")
-  const CardDA = `<div class="card">
-                  <span class="red">${DA.suit}</span>
-                  <span>${DA.value}</span>
-                  </div>`
-  document.querySelector('.start').insertAdjacentHTML('beforeend', CardDA)
-  const SA = selectCard("♠", "A")
-  const CardSA =`<div class="card">
-                  <span>${SA.suit}</span>
-                  <span>${SA.value}</span>
-                  </div>`
-  document.querySelector('.start').insertAdjacentHTML('beforeend', CardSA)
-  const CA = selectCard("♣", "A")
-  const CardCA = `<div class="card">
-                  <span>${CA.suit}</span>
-                  <span>${CA.value}</span>
-                  </div>`
-  document.querySelector('.start').insertAdjacentHTML('beforeend', CardCA)
-
-  let Hcount = 0, Dcount = 0, Scount = 0, Ccount = 0
+  let Hcount=0, Dcount=0, Scount=0, Ccount=0
   let PointCard = {}
-  for(let i = 0; i < 6; i++){
-    PointCard[i] = drawCard()
-    switch(PointCard[i].suit) {
-      case "♥": Hcount++;
-        break;
-      case "♦": Dcount++;
-        break;
-      case "♠": Scount++;
-        break;
-      case "♣": Ccount++;
-        break;
+
+  function startCard(){
+    createDeck()
+    const HA = selectCard("♥", "A")
+    const CardHA = `<div class="card">
+                    <span class="red">${HA.suit}</span>
+                    <span>${HA.value}</span>
+                    </div>`
+    document.querySelector('.start').insertAdjacentHTML('beforeend', CardHA)
+    const DA = selectCard("♦", "A")
+    const CardDA = `<div class="card">
+                    <span class="red">${DA.suit}</span>
+                    <span>${DA.value}</span>
+                    </div>`
+    document.querySelector('.start').insertAdjacentHTML('beforeend', CardDA)
+    const SA = selectCard("♠", "A")
+    const CardSA =`<div class="card">
+                    <span>${SA.suit}</span>
+                    <span>${SA.value}</span>
+                    </div>`
+    document.querySelector('.start').insertAdjacentHTML('beforeend', CardSA)
+    const CA = selectCard("♣", "A")
+    const CardCA = `<div class="card">
+                    <span>${CA.suit}</span>
+                    <span>${CA.value}</span>
+                    </div>`
+    document.querySelector('.start').insertAdjacentHTML('beforeend', CardCA)
+
+    Hcount = 0
+    Dcount = 0
+    Scount = 0
+    Ccount = 0
+    PointCard = {}
+
+    for(let i = 0; i < 7; i++){
+      PointCard[i] = drawCard()
+      switch(PointCard[i].suit) {
+        case "♥": Hcount++;
+          break;
+        case "♦": Dcount++;
+          break;
+        case "♠": Scount++;
+          break;
+        case "♣": Ccount++;
+          break;
+      }
+      if(Hcount >= 5 || Dcount >= 5 || Scount >= 5 || Ccount >= 5){
+        document.querySelectorAll('.horsebox').forEach(element => {element.innerHTML = ''})
+        startCard()
+      }
+    }
+      for(let i =0; i < 7; i++){
+      let Course = `<div class="card">
+                      <span>${PointCard[i].suit}</span>
+                      <span>${PointCard[i].value}</span>
+                      </div>`
+      document.querySelector(`.${i}`).insertAdjacentHTML('beforeend', Course)
     }
   }
-  console.log(Hcount)
-  console.log(Dcount)
-  console.log(Scount)
-  console.log(Ccount)
+  startCard()
+
+
 </script>
     </body>
 </html>
