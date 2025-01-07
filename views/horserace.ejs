@@ -37,13 +37,13 @@ card.js기능호출
 
 연결:server.js-game/card.js
 
-      <div class="horsebox 6"></div>
-      <div class="horsebox 5"></div>
-      <div class="horsebox 4"></div>
-      <div class="horsebox 3"></div>
-      <div class="horsebox 2"></div>
-      <div class="horsebox 1"></div>
-      <div class="horsebox 0"></div>
+      <div class="horsebox" data-index="6"></div>
+      <div class="horsebox" data-index="5"></div>
+      <div class="horsebox" data-index="4"></div>
+      <div class="horsebox" data-index="3"></div>
+      <div class="horsebox" data-index="2"></div>
+      <div class="horsebox" data-index="1"></div>
+      <div class="horsebox" data-index="0"></div>
       <div class="horsebox start"></div>
 
 
@@ -103,17 +103,18 @@ card.js기능호출
         startCard()
       }
     }
+    console.log(PointCard[0])
       for(let i =0; i < 7; i++){
       let Course = `<div class="card">
                       <span>${PointCard[i].suit}</span>
                       <span>${PointCard[i].value}</span>
                       </div>`
-      document.querySelector(`.${i}`).insertAdjacentHTML('beforeend', Course)
+      document.querySelector(`[data-index="${i}"]`).insertAdjacentHTML('beforeend', Course)
     }
   }
   startCard()
 
-
+  
 </script>
     </body>
 </html>
