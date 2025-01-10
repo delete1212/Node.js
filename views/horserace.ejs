@@ -37,6 +37,7 @@ card.js기능호출
 
 연결:server.js-game/card.js
 
+      <div class="horsebox" data-index="7"></div>
       <div class="horsebox" data-index="6"></div>
       <div class="horsebox" data-index="5"></div>
       <div class="horsebox" data-index="4"></div>
@@ -44,41 +45,42 @@ card.js기능호출
       <div class="horsebox" data-index="2"></div>
       <div class="horsebox" data-index="1"></div>
       <div class="horsebox" data-index="0"></div>
-      <div class="horsebox start"></div>
 
 
 <script type="module" src="card.js"></script>
 <script type="module">
   import { createDeck, drawCard, selectCard } from './card.js';
   let Hcount=0, Dcount=0, Scount=0, Ccount=0
+  let Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
   let PointCard = {}
+  let HA, DA, SA, CA
 
   function startCard(){
     createDeck()
-    const HA = selectCard("♥", "A")
-    const CardHA = `<div class="card">
+    HA = selectCard("♥", "A")
+    HA = `<div class="card ♥">
                     <span class="red">${HA.suit}</span>
                     <span>${HA.value}</span>
                     </div>`
-    document.querySelector('.start').insertAdjacentHTML('beforeend', CardHA)
-    const DA = selectCard("♦", "A")
-    const CardDA = `<div class="card">
+    document.querySelector('[data-index="0"]').insertAdjacentHTML('beforeend', HA)
+    DA = selectCard("♦", "A")
+    DA = `<div class="card ♦">
                     <span class="red">${DA.suit}</span>
                     <span>${DA.value}</span>
                     </div>`
-    document.querySelector('.start').insertAdjacentHTML('beforeend', CardDA)
-    const SA = selectCard("♠", "A")
-    const CardSA =`<div class="card">
+    document.querySelector('[data-index="0"]').insertAdjacentHTML('beforeend', DA)
+    SA = selectCard("♠", "A")
+    SA =`<div class="card ♠">
                     <span>${SA.suit}</span>
                     <span>${SA.value}</span>
                     </div>`
-    document.querySelector('.start').insertAdjacentHTML('beforeend', CardSA)
-    const CA = selectCard("♣", "A")
-    const CardCA = `<div class="card">
+    document.querySelector('[data-index="0"]').insertAdjacentHTML('beforeend', SA)
+    CA = selectCard("♣", "A")
+    CA = `<div class="card ♣">
                     <span>${CA.suit}</span>
                     <span>${CA.value}</span>
                     </div>`
-    document.querySelector('.start').insertAdjacentHTML('beforeend', CardCA)
+    document.querySelector('[data-index="0"]').insertAdjacentHTML('beforeend', CA)
 
     Hcount = 0
     Dcount = 0
@@ -109,10 +111,48 @@ card.js기능호출
                       <span>${PointCard[i].suit}</span>
                       <span>${PointCard[i].value}</span>
                       </div>`
-      document.querySelector(`[data-index="${i}"]`).insertAdjacentHTML('beforeend', Course)
+      document.querySelector(`[data-index="${i+1}"]`).insertAdjacentHTML('beforeend', Course)
     }
+    Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
   }
   startCard()
+
+
+  function raceCard(){
+      let raceSuit = drawCard().suit
+      console.log(raceSuit)
+      switch(raceSuit) {
+        case "♥":
+          document.querySelectorAll('.card.♥').forEach(element => {
+          element.remove()
+          })
+          Hpoint++
+          document.querySelector(`.${Hpoint}`).insertAdjacentHTML('beforeend', HA)
+          break;
+        case "♦":
+          document.querySelectorAll('.card.♦').forEach(element => {
+          element.remove()
+          })
+          Dpoint++
+          document.querySelector(`.${Dpoint}`).insertAdjacentHTML('beforeend', DA)
+          break;
+        case "♠":
+          document.querySelectorAll('.card.♠').forEach(element => {
+          element.remove()
+          })
+          Spoint++
+          document.querySelector(`.${Spoint}`).insertAdjacentHTML('beforeend', SA)
+          break;
+        case "♣":
+          document.querySelectorAll('.card.♣').forEach(element => {
+          element.remove()
+          })
+          Cpoint++
+          document.querySelector(`.${Cpoint}`).insertAdjacentHTML('beforeend', CA)
+          break;
+      }
+  }
+  raceCard()
 
   
 </script>
