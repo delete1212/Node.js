@@ -114,46 +114,58 @@ card.js기능호출
       document.querySelector(`[data-index="${i+1}"]`).insertAdjacentHTML('beforeend', Course)
     }
     Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
+    raceCard()
   }
   startCard()
 
 
   function raceCard(){
-      let raceSuit = drawCard().suit
+      let raceSuit = drawCard()
       console.log(raceSuit)
-      switch(raceSuit) {
+      switch(raceSuit.suit) {
         case "♥":
           document.querySelectorAll('.card.♥').forEach(element => {
           element.remove()
           })
           Hpoint++
-          document.querySelector(`.${Hpoint}`).insertAdjacentHTML('beforeend', HA)
+          console.log(Hpoint, Dpoint, Spoint, Cpoint)
+          document.querySelector(`[data-index="${Hpoint}"]`).insertAdjacentHTML('beforeend', HA)
           break;
         case "♦":
           document.querySelectorAll('.card.♦').forEach(element => {
           element.remove()
           })
           Dpoint++
-          document.querySelector(`.${Dpoint}`).insertAdjacentHTML('beforeend', DA)
+          document.querySelector(`[data-index="${Dpoint}"]`).insertAdjacentHTML('beforeend', DA)
           break;
         case "♠":
           document.querySelectorAll('.card.♠').forEach(element => {
           element.remove()
           })
           Spoint++
-          document.querySelector(`.${Spoint}`).insertAdjacentHTML('beforeend', SA)
+          document.querySelector(`[data-index="${Spoint}"]`).insertAdjacentHTML('beforeend', SA)
           break;
         case "♣":
           document.querySelectorAll('.card.♣').forEach(element => {
           element.remove()
           })
           Cpoint++
-          document.querySelector(`.${Cpoint}`).insertAdjacentHTML('beforeend', CA)
+          document.querySelector(`[data-index="${Cpoint}"]`).insertAdjacentHTML('beforeend', CA)
           break;
       }
   }
-  raceCard()
 
+  function checkPoint() {
+  const Points = {Hpoint, Dpoint, Spoint, Cpoint};
+
+  for (const [point, value] of Object.entries(Points)) {
+    if (value >= 8) {
+      temp(point)//point에 해당하는 에이스 승리
+      return
+    }
+  }
+  raceCard()
+}
   
 </script>
     </body>
