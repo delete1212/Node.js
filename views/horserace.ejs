@@ -11,32 +11,6 @@
 
       <%- include('nav.ejs', { user: user })%>
 
-      모양별 에이스 4장 선별 후 가로로 나열
-수직으로 카드 7장 나열
-이때 같은모양 5개 이상시 초기화 후 처음부터 다시
-모양 선택 버튼x4
-버튼누르면 게임시작 카드뽑기 반복(간격 존재)
-예)
-#
-#
-#
-#
-#
-#
-#
-  A B C D
-  | | | | 점수
-
-
-스크립트 구성
-card.js기능호출
-버튼 누르면 랜덤 카드 호출 반복
-호출한 카드 따라 A,B,C,D DIV박스 이동(+카운트)
-카운트가 8이되면 해당 모양 승리
-초기화
-
-연결:server.js-game/card.js
-
       <div class="horsebox" data-index="7"></div>
       <div class="horsebox" data-index="6"></div>
       <div class="horsebox" data-index="5"></div>
@@ -46,10 +20,14 @@ card.js기능호출
       <div class="horsebox" data-index="1"></div>
       <div class="horsebox" data-index="0"></div>
 
+      <div class="cardBox"></div>
+
+
+
 
 <script type="module" src="card.js"></script>
 <script type="module">
-  import { createDeck, drawCard, selectCard } from './card.js';
+  import { createDeck, drawCard, selectCard, wait } from './card.js';
   let Hcount=0, Dcount=0, Scount=0, Ccount=0
   let Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
   let PointCard = {}
@@ -108,7 +86,7 @@ card.js기능호출
     console.log(PointCard[0])
       for(let i =0; i < 7; i++){
       let Course = `<div class="card">
-                      <span>${PointCard[i].suit}</span>
+                      <span class="${PointCard[i].suit === '♥' || PointCard[i].suit === '♦' ? 'red' : ''}">${PointCard[i].suit}</span>
                       <span>${PointCard[i].value}</span>
                       </div>`
       document.querySelector(`[data-index="${i+1}"]`).insertAdjacentHTML('beforeend', Course)
@@ -122,13 +100,22 @@ card.js기능호출
   function raceCard(){
       let raceSuit = drawCard()
       console.log(raceSuit)
+      
+      document.querySelectorAll('cardBox').forEach(element => {
+          element.remove()
+          })
+      let Course = `<div class="card">
+                      <span class="${raceSuit.suit === '♥' || raceSuit.suit === '♦' ? 'red' : ''}">${raceSuit.suit}</span>
+                      <span>${raceSuit.value}</span>
+                      </div>`
+      document.querySelector(`.cardBox`).insertAdjacentHTML('beforeend', Course)
+
       switch(raceSuit.suit) {
         case "♥":
           document.querySelectorAll('.card.♥').forEach(element => {
           element.remove()
           })
           Hpoint++
-          console.log(Hpoint, Dpoint, Spoint, Cpoint)
           document.querySelector(`[data-index="${Hpoint}"]`).insertAdjacentHTML('beforeend', HA)
           break;
         case "♦":
@@ -166,6 +153,8 @@ card.js기능호출
   }
   raceCard()
 }
+
+//카드 출력을 별도의 함수로 제작 필요
   
 </script>
     </body>
