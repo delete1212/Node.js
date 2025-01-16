@@ -20,7 +20,10 @@
       <div class="horsebox" data-index="1"></div>
       <div class="horsebox" data-index="0"></div>
 
-      <div class="cardBox"></div>
+      <div class="cardBox">
+        <div class="box1"></div>
+        <button id="button1">카드뽑기</button>
+      </div>
 
 
 
@@ -32,6 +35,14 @@
   let Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
   let PointCard = {}
   let HA, DA, SA, CA
+
+  function courseCard(Card, locate){
+    cardDetail = `<div class="card ♥">
+                    <span class="${Card.suit === '♥' || Card.suit === '♦' ? 'red' : ''}">${Card.suit}</span>
+                    <span>${Card.value}</span>
+                    </div>`
+    document.querySelector(locate).insertAdjacentHTML('beforeend', cardDetail)
+  }
 
   function startCard(){
     createDeck()
@@ -101,14 +112,14 @@
       let raceSuit = drawCard()
       console.log(raceSuit)
       
-      document.querySelectorAll('cardBox').forEach(element => {
+      document.querySelectorAll('.box1').forEach(element => {
           element.remove()
           })
       let Course = `<div class="card">
                       <span class="${raceSuit.suit === '♥' || raceSuit.suit === '♦' ? 'red' : ''}">${raceSuit.suit}</span>
                       <span>${raceSuit.value}</span>
                       </div>`
-      document.querySelector(`.cardBox`).insertAdjacentHTML('beforeend', Course)
+      document.querySelector(`.box1`).insertAdjacentHTML('beforeend', Course)
 
       switch(raceSuit.suit) {
         case "♥":
@@ -138,9 +149,11 @@
           })
           Cpoint++
           document.querySelector(`[data-index="${Cpoint}"]`).insertAdjacentHTML('beforeend', CA)
-          break;
-      }
+          break;   
+     }
   }
+
+  document.getElementById("button1").addEventListener("click", raceCard);
 
   function checkPoint() {
   const Points = {Hpoint, Dpoint, Spoint, Cpoint};
