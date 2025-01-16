@@ -112,10 +112,10 @@
       let raceSuit = drawCard()
       console.log(raceSuit)
       
-      document.querySelectorAll('.box1').forEach(element => {
+      document.querySelectorAll('.card.course').forEach(element => {
           element.remove()
           })
-      let Course = `<div class="card">
+      let Course = `<div class="card course">
                       <span class="${raceSuit.suit === '♥' || raceSuit.suit === '♦' ? 'red' : ''}">${raceSuit.suit}</span>
                       <span>${raceSuit.value}</span>
                       </div>`
