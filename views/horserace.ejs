@@ -23,6 +23,7 @@
       <div class="cardBox">
         <div class="box1"></div>
         <button id="button1">카드뽑기</button>
+        <div class="box2" data-index="8"></div>
       </div>
 
 
@@ -103,7 +104,6 @@
       document.querySelector(`[data-index="${i+1}"]`).insertAdjacentHTML('beforeend', Course)
     }
     Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
-    raceCard()
   }
   startCard()
 
@@ -151,24 +151,37 @@
           document.querySelector(`[data-index="${Cpoint}"]`).insertAdjacentHTML('beforeend', CA)
           break;   
      }
+     checkPoint()
   }
 
   document.getElementById("button1").addEventListener("click", raceCard);
 
-  function checkPoint() {
+function checkPoint() {
   const Points = {Hpoint, Dpoint, Spoint, Cpoint};
 
   for (const [point, value] of Object.entries(Points)) {
     if (value >= 8) {
-      temp(point)//point에 해당하는 에이스 승리
+      win(point)
       return
     }
   }
-  raceCard()
 }
 
-//카드 출력을 별도의 함수로 제작 필요
-  
+function win(point){
+  if(point=='Hpoint'){
+    alert("하트 승리!")
+  } else if(point=='Dpoint'){
+    alert("다이아 승리!")
+  } else if(point=='Spoint'){
+    alert("스페이드 승리!")
+  } else {
+    alert("클로버 승리!")
+  }
+}
+//구현 완료
+//승리선택구현필요
+//승리시 재시작 버튼 구현필요
+//승리시 전적 db에 보내기
 </script>
     </body>
 </html>
