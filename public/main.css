@@ -178,7 +178,7 @@ body {
   padding : 10px;
   border: inset;
   height: 100px;
-  width: 70px;
+  width: 400px;
   margin: 0 auto;
   display: flex;
   gap: 10px;
@@ -189,6 +189,16 @@ body {
   height: 30px;
 }
 
+.bet-box{
+  background: #3CB371;
+  padding : 10px;
+  border: inset;
+  height: 50px;
+  width: 400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
 
 
 

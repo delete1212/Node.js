@@ -20,9 +20,17 @@
       <div class="horsebox" data-index="1"></div>
       <div class="horsebox" data-index="0"></div>
 
+      <div class="bet-box">
+        <button class="btn" id="btnH">하트배팅</button>
+        <button class="btn" id="btnD">다이아배팅</button>
+        <button class="btn" id="btnS">스페이드배팅</button>
+        <button class="btn" id="btnC">클로버배팅</button>
+      </div>
+
       <div class="cardBox">
         <div class="box1"></div>
-        <button id="button1">카드뽑기</button>
+        <button class="btn" id="button1">카드뽑기</button>
+        <button class="btn" id="buttonReset">다시하기</button>
         <div class="box2" data-index="8"></div>
       </div>
 
@@ -36,6 +44,9 @@
   let Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
   let PointCard = {}
   let HA, DA, SA, CA
+  let GameSet
+  let GameReady
+  let betSuit
 
   function courseCard(Card, locate){
     cardDetail = `<div class="card ♥">
@@ -46,6 +57,9 @@
   }
 
   function startCard(){
+    document.querySelectorAll('.card').forEach(element => {
+          element.remove()
+          })
     createDeck()
     HA = selectCard("♥", "A")
     HA = `<div class="card ♥">
@@ -104,9 +118,10 @@
       document.querySelector(`[data-index="${i+1}"]`).insertAdjacentHTML('beforeend', Course)
     }
     Hpoint=0, Dpoint=0, Spoint=0, Cpoint=0
+    GameSet = true
+    GameReady = false
   }
   startCard()
-
 
   function raceCard(){
       let raceSuit = drawCard()
@@ -154,7 +169,46 @@
      checkPoint()
   }
 
-  document.getElementById("button1").addEventListener("click", raceCard);
+  function GameCheck(){
+    //GameSet=true && GameReady=true
+    //카드뽑기
+    console.log(GameSet)
+    console.log(GameReady)
+    if(GameSet&&GameReady){
+      raceCard()
+    } else if(GameReady) {
+      alert("배팅할 카드를 선택해주세요!")
+    } else if(GameSet) {
+      alert("게임이 시작되지 않았습니다!")
+    }
+  }
+
+  document.getElementById("button1").addEventListener("click", GameCheck);
+  document.getElementById("buttonReset").addEventListener("click", startCard);
+
+  document.getElementById("btnH").addEventListener("click", Betting("H"));
+  document.getElementById("btnD").addEventListener("click", Betting("D"));
+  document.getElementById("btnS").addEventListener("click", Betting("S"));
+  document.getElementById("btnC").addEventListener("click", Betting("C"));
+
+  function Betting(Suit){
+    switch(Suit){
+      case "H":
+        betSuit="Hpoint"
+        break;
+      case "D":
+        betSuit="Dpoint"
+        break;
+      case "S":
+        betSuit="Spoint"
+        break;
+      case "C":
+        betSuit="Cpoint"
+        break;
+    }
+    GameReady=true
+  }
+
 
 function checkPoint() {
   const Points = {Hpoint, Dpoint, Spoint, Cpoint};
@@ -177,10 +231,9 @@ function win(point){
   } else {
     alert("클로버 승리!")
   }
+  GameSet = false
 }
-//구현 완료
-//승리선택구현필요
-//승리시 재시작 버튼 구현필요
+//시작시 기능오류
 //승리시 전적 db에 보내기
 </script>
     </body>
