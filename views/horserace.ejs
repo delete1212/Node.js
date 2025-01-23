@@ -176,20 +176,20 @@
     console.log(GameReady)
     if(GameSet&&GameReady){
       raceCard()
-    } else if(GameReady) {
+    } else if(!GameReady) {
       alert("배팅할 카드를 선택해주세요!")
-    } else if(GameSet) {
-      alert("게임이 시작되지 않았습니다!")
+    } else if(!GameSet) {
+      alert("게임이 아직 시작되지 않았습니다!")
     }
   }
 
   document.getElementById("button1").addEventListener("click", GameCheck);
   document.getElementById("buttonReset").addEventListener("click", startCard);
 
-  document.getElementById("btnH").addEventListener("click", Betting("H"));
-  document.getElementById("btnD").addEventListener("click", Betting("D"));
-  document.getElementById("btnS").addEventListener("click", Betting("S"));
-  document.getElementById("btnC").addEventListener("click", Betting("C"));
+  document.getElementById("btnH").addEventListener("click", function() {Betting("H");});
+  document.getElementById("btnD").addEventListener("click", function() {Betting("D");});
+  document.getElementById("btnS").addEventListener("click", function() {Betting("S");});
+  document.getElementById("btnC").addEventListener("click", function() {Betting("C");});
 
   function Betting(Suit){
     switch(Suit){
@@ -205,7 +205,10 @@
       case "C":
         betSuit="Cpoint"
         break;
+      default:
+        return;
     }
+    console.log(betSuit)
     GameReady=true
   }
 
