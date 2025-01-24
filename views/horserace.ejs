@@ -192,6 +192,7 @@
   document.getElementById("btnC").addEventListener("click", function() {Betting("C");});
 
   function Betting(Suit){
+    if(!GameReady){
     switch(Suit){
       case "H":
         betSuit="Hpoint"
@@ -210,6 +211,9 @@
     }
     console.log(betSuit)
     GameReady=true
+  } else {
+    alert("이미 베팅된 상태입니다!")
+  }
   }
 
 
@@ -225,14 +229,10 @@ function checkPoint() {
 }
 
 function win(point){
-  if(point=='Hpoint'){
-    alert("하트 승리!")
-  } else if(point=='Dpoint'){
-    alert("다이아 승리!")
-  } else if(point=='Spoint'){
-    alert("스페이드 승리!")
+  if(point==betSuit){
+    alert("승리!")
   } else {
-    alert("클로버 승리!")
+    alert("패배!")
   }
   GameSet = false
 }
